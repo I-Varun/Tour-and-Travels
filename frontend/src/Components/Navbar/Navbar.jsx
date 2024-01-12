@@ -4,6 +4,7 @@ import { MdOutlineTravelExplore } from 'react-icons/md';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { TbGridDots } from 'react-icons/tb';
 import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [active, setActive] = useState('navBar');
@@ -41,6 +42,11 @@ const Navbar = () => {
                 Home
               </a>
             </li>
+            <li className="navItem">
+            <Link to="/booked-tours" className="navLink">
+              Packages
+            </Link>
+          </li>
             {user ? (
               <button className="btn" onClick={logoutHandler}>
                 Logout

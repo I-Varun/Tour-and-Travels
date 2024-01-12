@@ -60,7 +60,7 @@ const UpiPayment = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ user_id: JSON.parse(localStorage.getItem("userInfo")).user.user_id, tour_id:tourIdFromURL }),
+            body: JSON.stringify({ user_id: JSON.parse(localStorage.getItem("userInfo")).user[0].user_id, tour_id:tourIdFromURL }),
         })
         .then((response) => response.json())
         .then((data) => {
