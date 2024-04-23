@@ -1,9 +1,15 @@
 import React from "react";
 import "./Footer.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faGlobe } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faGlobe,
+  faHouse,
+  faPlane,
+  faMap,
+  faSuitcase,
+} from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { faHouse, faPlane, faMap, faSuitcase } from "@fortawesome/free-solid-svg-icons";
 const Footer = () => {
   return (
     <footer className="footer" id="about">
@@ -24,19 +30,19 @@ const Footer = () => {
       <div className="links-section">
         <ul>
           <li>
-          <FontAwesomeIcon icon={faHouse} />
+            <FontAwesomeIcon icon={faHouse} />
             <a href="/"> Home</a>
           </li>
           <li>
-          <FontAwesomeIcon icon={faPlane} />
+            <FontAwesomeIcon icon={faPlane} />
             <a href="/Flight"> Flight</a>
           </li>
           <li>
-          <FontAwesomeIcon icon={faMap} />
+            <FontAwesomeIcon icon={faMap} />
             <a href="/tour"> Tour</a>
           </li>
           <li>
-          <FontAwesomeIcon icon={faSuitcase} />
+            <FontAwesomeIcon icon={faSuitcase} />
             <a href="/packages"> Packages</a>
           </li>
         </ul>

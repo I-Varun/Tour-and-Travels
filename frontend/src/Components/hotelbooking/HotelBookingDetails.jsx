@@ -19,7 +19,6 @@ const HotelBookingDetails = () => {
   const location = useLocation();
   const toast = useToast();
 
-
   // Retrieve hotel_id from the URL
   const searchParams = new URLSearchParams(location.search);
   const hotelIdFromURL = searchParams.get("hotel_id");
@@ -27,11 +26,12 @@ const HotelBookingDetails = () => {
     name: "",
     email: "",
     phone: "",
+    discount: "",
     numberOfRooms: "",
     checkinDate: "",
     checkoutDate: "",
-    discount: "",
   });
+  const [amount, setAmount] = useState();
   const [bookingCompleted, setBookingCompleted] = useState(false);
   const [hotelDetails, sethotelDetails] = useState(null); // State to store hotel details
   const validateEmail = (email) => {
@@ -51,8 +51,8 @@ const HotelBookingDetails = () => {
         const response = await fetch(`/hotel/specificread/${hotelIdFromURL}`);
         if (response.ok) {
           const data = await response.json();
-          sethotelDetails(data.hotel); // Set the fetched hotel details to state
-          console.log(data.hotel);
+          sethotelDetails(data.hotels); // Set the fetched hotel details to state
+          console.log(data.hotels);
         } else {
           throw new Error("Failed to fetch hotel details");
         }
@@ -64,6 +64,15 @@ const HotelBookingDetails = () => {
 
     fetchhotelDetails(); // Call the function to fetch hotel details
   }, [hotelIdFromURL]);
+  useEffect(() => {
+    // This effect will run whenever amount changes
+    if (bookingCompleted && amount !== undefined) {
+      history.push(
+        `/payment-options?hotel_id=${hotelIdFromURL}&amount=${amount}&checkinDate=${bookingDetails.checkinDate}&checkoutDate=${bookingDetails.checkoutDate}&rooms=${bookingDetails.numberOfRooms}&name=${bookingDetails.name}&email=${bookingDetails.email}&phone_no=${bookingDetails.phone}`
+      );
+    }
+  }, [bookingCompleted, amount, hotelIdFromURL, bookingDetails, history]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBookingDetails({
@@ -78,7 +87,8 @@ const HotelBookingDetails = () => {
       !bookingDetails.email ||
       !bookingDetails.phone ||
       !bookingDetails.numberOfRooms ||
-      !bookingDetails.checkinDate || !bookingDetails.checkoutDate
+      !bookingDetails.checkinDate ||
+      !bookingDetails.checkoutDate
     ) {
       toast({
         title: "Error",
@@ -111,35 +121,50 @@ const HotelBookingDetails = () => {
       return;
     }
     if (hotelDetails) {
-      const { price } =
-        hotelDetails;
-
+      const { roomprice } = hotelDetails;
+      console.log(hotelDetails);
       const numberofRooms = parseInt(bookingDetails.numberOfRooms);
       const checkinDate = new Date(bookingDetails.checkinDate)
         .toISOString()
         .split("T")[0];
-        const checkoutDate = new Date(bookingDetails.checkoutDate)
+      const checkoutDate = new Date(bookingDetails.checkoutDate)
         .toISOString()
         .split("T")[0];
-      // Calculate total amount
-    const discount = parseInt(bookingDetails.discount);
-    let amount;
-    if(discount){
-        amount = (discount*numberofRooms*price)/100;
-    }else{
-        amount = numberofRooms*price;
-    }
-      
-      if(discount > 5){
+      const numberOfDays = Math.floor(
+        (checkoutDate - checkinDate) / (1000 * 60 * 60 * 24)
+      );
+      const discount = parseFloat(bookingDetails.discount);
+      if (checkinDate > checkoutDate) {
         toast({
-            title: "Error",
-            description: `discount percentage will be within 5%.`,
-            status: "warning",
-            duration: 1000,
-            isClosable: true,
-          });
+          title: "Error",
+          description: `check-in date should be less than or equal to check-out date`,
+          status: "error",
+          duration: 1000,
+          isClosable: true,
+        });
+        return;
       }
-
+      let calculatedAmount;
+      if (discount) {
+        calculatedAmount =
+          numberofRooms * roomprice -
+          (discount * numberofRooms * roomprice) / 100;
+        console.log(calculatedAmount);
+      } else {
+        calculatedAmount = numberofRooms * roomprice;
+        console.log(calculatedAmount);
+      }
+      console.log(calculatedAmount);
+      if (discount > 5) {
+        toast({
+          title: "Error",
+          description: `discount percentage will be within 5%.`,
+          status: "warning",
+          duration: 1000,
+          isClosable: true,
+        });
+      }
+      setAmount(calculatedAmount);
       console.log("Booking Details submitted:", bookingDetails);
 
       setBookingDetails({
@@ -155,7 +180,7 @@ const HotelBookingDetails = () => {
 
       // history.push('/payment-options');
       history.push(
-        `/payment-options?hotel_id=${hotelIdFromURL}&amount=${amount}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&people=${numberofRooms}`
+        `/payment-options?hotel_id=${hotelIdFromURL}&amount=${calculatedAmount}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&rooms=${numberofRooms}&name=${bookingDetails.name}&email=${bookingDetails.email}&phone_no=${bookingDetails.phone}`
       );
     }
   };
@@ -223,7 +248,7 @@ const HotelBookingDetails = () => {
           onChange={handleInputChange}
         />
       </FormControl>
-      <FormControl id="discount" isRequired mb="3">
+      <FormControl id="discount" mb="3">
         <FormLabel>Enter discount percentage you want</FormLabel>
         <Input
           type="number"

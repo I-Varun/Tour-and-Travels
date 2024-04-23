@@ -52,82 +52,47 @@ const Hoteldetails = () => {
         </h2>
       </div>
       <div className="secContent">
-        {hotelData.map(
-          ({
-            hotel_id,
-            hotel_name,
-            location,
-          }) => {
-            
-            return (
-              <div key={hotel_id} className="singleDestination">
-                <div className="cardInfo">
-                 
-                  <div className="continent">
-                    {/* <h2>
-                      <strong>{description.split(".")[0]}</strong>
-                    </h2>
-                    <h4>
-                      <i>
-                        <strong>"{Tagline}"</strong>
-                      </i>
-                    </h4> */}
-                    <span className="name" style={{ fontWeight: "600" }}>
-                      {/* Hotel id: {hotel_id} */}
-                      <p style={{ fontWeight: "600" }}>
-                        Hotel name: {hotel_name}
-                      </p>
-                      <p style={{ fontWeight: "600" }}>
-                        Location:{" "}
-                        <HiOutlineLocationMarker
-                          className="icon"
-                          style={{ display: "inline", fontSize: "1.2em" }}
-                        />{" "}
-                        {location}
-                      </p>
-                    </span>
-                  </div>
-
-                  <div className="desc">
-                  <p style={{ fontWeight: "600" }}>
-                        room type: Standard
-                      </p>
+        {hotelData.map(({ hotel_id, hotel_name, location, roomprice }) => {
+          return (
+            <div key={hotel_id} className="singleDestination">
+              <div className="cardInfo">
+                <div className="continent">
+                  <span className="name" style={{ fontWeight: "600" }}>
+                    {/* Hotel id: {hotel_id} */}
                     <p style={{ fontWeight: "600" }}>
-                      Room tariff: {"\u20B9"}
-                      1000
+                      Hotel name: {hotel_name}
                     </p>
                     <p style={{ fontWeight: "600" }}>
-                        room type: delux
-                      </p>
-                    <p style={{ fontWeight: "600" }}>
-                      Room tariff: {"\u20B9"}
-                      2000
+                      Location:{" "}
+                      <HiOutlineLocationMarker
+                        className="icon"
+                        style={{ display: "inline", fontSize: "1.2em" }}
+                      />{" "}
+                      {location}
                     </p>
-                    <p style={{ fontWeight: "600" }}>
-                        room type: Premium
-                      </p>
-                    <p style={{ fontWeight: "600" }}>
-                      Room tariff: {"\u20B9"}
-                      2500
-                    </p>
-                  </div>
-                  <button
-                    className="btn flex"
-                    onClick={() => handleBookNowClick(hotel_id)}
-                  >
-                    BOOK NOW
-                    <HiOutlineClipboardCheck className="icon" />
-                  </button>
+                  </span>
                 </div>
+
+                <div className="desc">
+                  <p style={{ fontWeight: "600" }}>
+                    Room tariff: {"\u20B9"}
+                    {roomprice}
+                  </p>
+                </div>
+                <button
+                  className="btn flex"
+                  onClick={() => handleBookNowClick(hotel_id)}
+                >
+                  BOOK NOW
+                  <HiOutlineClipboardCheck className="icon" />
+                </button>
               </div>
-            );
-          }
-        )}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
 };
 
 export default Hoteldetails;
-
-  

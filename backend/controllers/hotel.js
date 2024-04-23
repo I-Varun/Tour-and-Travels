@@ -66,8 +66,17 @@ const specifichotelread = (req, res) => {
       if (results.length == 0) {
         res.status(404).send({ message: "Hotel not found" });
       } else {
+<<<<<<< HEAD
         res.status(200).json({ hotel: results[0] });
       }
     }
   });}
 export { hoteladd, hotelread, hotelupdate, hoteldelete ,specifichotelread};
+=======
+        res.status(200).json({ hotels: results[0] });
+      }
+    }
+  });
+};
+export { hoteladd, hotelread, hotelupdate, hoteldelete, specifichotelread };
+>>>>>>> 30f49ec9c978da9de5646cbb0894756c0f5fc082
